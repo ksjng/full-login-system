@@ -1,0 +1,13 @@
+{
+    "name": "full-login-system",
+    "private": true,
+    "scripts": {
+        "client:build": "nuxt build client",
+        "client:dev": "nuxt dev client",
+        "client:generate": "nuxt generate client",
+        "client:preview": "nuxt preview client"
+    },
+    "devDependencies": {
+        "nuxt": "^3.4.1"
+    }
+}
