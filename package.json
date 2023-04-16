@@ -1,13 +1,22 @@
 {
     "name": "full-login-system",
     "private": true,
+    "type": "module",
+    "prisma": {
+        "schema": "api/prisma/schema.prisma"
+    },
     "scripts": {
         "client:build": "nuxt build client",
         "client:dev": "nuxt dev client",
         "client:generate": "nuxt generate client",
-        "client:preview": "nuxt preview client"
+        "client:preview": "nuxt preview client",
+        "api:start": "node api/"
     },
     "devDependencies": {
-        "nuxt": "^3.4.1"
+        "nuxt": "^3.4.1",
+        "prisma": "^4.12.0"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.12.0"
     }
 }

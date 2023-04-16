@@ -1,5 +1,7 @@
 node_modules
 *.log*
+.env
+api/config.js
 client/.nuxt
 client/.output
 client/dist
