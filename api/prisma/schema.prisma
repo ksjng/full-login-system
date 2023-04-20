@@ -17,6 +17,6 @@ model Users {
     password String @db.VarChar(60)
     ipAddress String @db.VarChar(128)
     createdAt DateTime @default(now())
-    lastLoginAt DateTime
+    lastLoginAt DateTime?
     status Int @default(0)
 }
