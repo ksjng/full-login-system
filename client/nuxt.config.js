@@ -11,6 +11,12 @@ export default defineNuxtConfig({
                 proxy: "http://127.0.0.1:3001/api/**"
             }
         }
+    },
+
+    runtimeConfig: {
+        public: {
+            hCaptchaSiteKey: process.env.HCAPTCHA_SITE_KEY
+        }
     }
 
 })
