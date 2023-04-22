@@ -2,7 +2,7 @@
     
     <main class="grid place-items-center min-h-screen m-auto">
 
-        <div class="max-w-prose w-full p-5">
+        <div class="max-w-prose w-full p-5 mt-10">
 
             <h1 class="font-medium text-4xl my-5">Sign up</h1>
 
@@ -30,10 +30,12 @@
 
                 <vue-hcaptcha :sitekey="config.public.hCaptchaSiteKey"></vue-hcaptcha>
 
-                <small class="block text-small mb-3 text-gray-500">By registering you agree to our Terms of Service and Privacy Policy.</small>
+                <small class="block text-small my-3 text-gray-500">By registering you agree to our Terms of Service and Privacy Policy.</small>
 
-                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign up</button>
+                <button type="submit" class="float-right my-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign up</button>
             
+                <p class="text-small mt-16 text-gray-700">Already have an account? <nuxt-link to="/login">Log in</nuxt-link>.</p>
+
             </form>
 
         </div>
