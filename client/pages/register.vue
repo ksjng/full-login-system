@@ -177,7 +177,6 @@ const submitRegisterForm = async () => {
         console.error(err);
         error.value = err.message;
     }
-    
 
 }
 
