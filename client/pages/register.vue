@@ -6,6 +6,12 @@
 
             <h1 class="font-medium text-4xl my-5">Sign up</h1>
 
+            <div v-if="error" class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Info</span>
+                <p>{{ error }}</p>
+            </div>
+
             <form @submit.prevent="submitRegisterForm">
 
                 <div class="mb-4">
@@ -53,7 +59,7 @@
                             'border-[#42d392] ': !v$.password.$invalid
                         }"
                     >
-                    <password-meter :password="registerFormData.password" @score="scoreChange" />
+                    <password-meter :password="registerFormData.password" />
                     <span class="text-xs text-red-500" v-if="v$.password.$error">{{ v$.password.$errors[0].$message }}</span>
                 </div>
 
@@ -123,10 +129,7 @@ const rules = computed(() => {
         password: {
             required: helpers.withMessage("The password field is required", required),
             minLength: minLength(8),
-            containsPasswordRequirement: helpers.withMessage(
-                () => "This password is too weak", 
-                () => passwordScore > 0
-            )
+            maxLength: maxLength(72)
         },
         repeatPassword: {
             required: helpers.withMessage("The repeat password field is required", required),
@@ -144,17 +147,37 @@ const captchaVerify = (tokenStr) => {
     registerFormData.captcha = tokenStr;
 }
 
-let passwordScore = ref(0);
-
-const scoreChange = (payload) => {
-    passwordScore = payload.score;
-}
+let error = ref("");
 
 const submitRegisterForm = async () => {
 
     v$.value.$validate();
     if(v$.value.$error) return;
-    console.log(registerFormData)
+
+    error.value = "";
+
+    try {
+
+        const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(registerFormData)
+        })
+
+        if(!res.ok) throw new Error("Failed to connect with API server");
+        const body = await res.json();
+
+        if(!body.success) throw new Error(body.error);
+
+        return await navigateTo("/activate");
+
+    } catch(err) {
+        console.error(err);
+        error.value = err.message;
+    }
+    
 
 }
 
