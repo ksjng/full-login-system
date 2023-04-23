@@ -6,7 +6,7 @@
 
             <h1 class="font-medium text-4xl my-5">Sign up</h1>
 
-            <form>
+            <form @submit.prevent="submitRegisterForm">
 
                 <div class="mb-4">
                     <label for="username" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Username</label>
@@ -72,7 +72,8 @@
                     <span class="text-xs text-red-500" v-if="v$.repeatPassword.$error">{{ v$.repeatPassword.$errors[0].$message }}</span>
                 </div>
 
-                <vue-hcaptcha :sitekey="config.public.hCaptchaSiteKey"></vue-hcaptcha>
+                <vue-hcaptcha :sitekey="config.public.hCaptchaSiteKey" @verify="captchaVerify"></vue-hcaptcha>
+                <span class="text-xs text-red-500" v-if="v$.captcha.$error">{{ v$.captcha.$errors[0].$message }}</span>
 
                 <small class="block text-small my-3 text-gray-500">By registering you agree to our Terms of Service and Privacy Policy.</small>
 
@@ -131,5 +132,17 @@ const rules = computed(() => {
 });
 
 const v$ = useVuelidate(rules, registerFormData);
+
+const captchaVerify = (tokenStr) => {
+    registerFormData.captcha = tokenStr;
+}
+
+const submitRegisterForm = async () => {
+
+    v$.value.$validate();
+    if(v$.value.$error) return;
+    console.log(registerFormData)
+
+}
 
 </script>
