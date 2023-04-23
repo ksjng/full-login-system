@@ -1,7 +1,8 @@
 node_modules
 *.log*
-.env
 api/config.js
+api/prisma/.env
+client/.env
 client/.nuxt
 client/.output
 client/dist
