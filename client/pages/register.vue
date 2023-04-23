@@ -120,7 +120,11 @@ const rules = computed(() => {
         username: {
             required: helpers.withMessage("The username field is required", required),
             minLength: minLength(4),
-            maxLength: maxLength(20)
+            maxLength: maxLength(20),
+            isAlphanumeric: helpers.withMessage(
+                () => "Username must be alphanumeric (only letters, numbers and _)", 
+                (value) => /[A-Za-z0-9_]/.test(value)
+            )
         },
         email: {
             required: helpers.withMessage("The email field is required", required),
