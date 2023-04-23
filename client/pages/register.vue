@@ -53,6 +53,7 @@
                             'border-[#42d392] ': !v$.password.$invalid
                         }"
                     >
+                    <password-meter :password="registerFormData.password" @score="scoreChange" />
                     <span class="text-xs text-red-500" v-if="v$.password.$error">{{ v$.password.$errors[0].$message }}</span>
                 </div>
 
@@ -92,7 +93,9 @@
 
 <script setup>
 
+import { ref } from "vue";
 import VueHcaptcha from "@hcaptcha/vue3-hcaptcha";
+import PasswordMeter from "vue-simple-password-meter";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, sameAs, minLength, maxLength, helpers } from "@vuelidate/validators";
 
@@ -119,7 +122,11 @@ const rules = computed(() => {
         },
         password: {
             required: helpers.withMessage("The password field is required", required),
-            minLength: minLength(8)
+            minLength: minLength(8),
+            containsPasswordRequirement: helpers.withMessage(
+                () => "This password is too weak", 
+                () => passwordScore > 0
+            )
         },
         repeatPassword: {
             required: helpers.withMessage("The repeat password field is required", required),
@@ -135,6 +142,12 @@ const v$ = useVuelidate(rules, registerFormData);
 
 const captchaVerify = (tokenStr) => {
     registerFormData.captcha = tokenStr;
+}
+
+let passwordScore = ref(0);
+
+const scoreChange = (payload) => {
+    passwordScore = payload.score;
 }
 
 const submitRegisterForm = async () => {
