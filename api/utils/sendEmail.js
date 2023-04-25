@@ -17,13 +17,16 @@ const send = async (to, subject, html) => {
             auth: { user, pass }
         });
 
-        return await transporter.sendMail({
+        await transporter.sendMail({
             from: `${name} <${user}>`,
             to, subject, html
         });
+
+        return true;
         
     } catch(err) {
         console.error(err);
+        return false;
     }
 
 }
