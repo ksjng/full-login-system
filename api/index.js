@@ -5,6 +5,9 @@ import { PrismaClient } from "@prisma/client";
 
 import config from "./config.js";
 
+import "./utils/generateActivationEmail.js";
+import "./tasks/purgeInactiveUsers.js";
+
 const fastify = Fastify({trustProxy: true});
 
 fastify.register(cors);

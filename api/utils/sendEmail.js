@@ -6,6 +6,7 @@ import config from "../config.js";
 
 const { host, user, pass, name } = config.smtp;
 
+
 const send = async (to, subject, html) => {
 
     try {
@@ -31,6 +32,7 @@ const send = async (to, subject, html) => {
 
 }
 
+
 const sendActivationEmail = async (to, activationUrl) => {
 
     const htmlContent = await fs.readFile("api/emails/activateAccount.html", "utf8");
@@ -39,5 +41,6 @@ const sendActivationEmail = async (to, activationUrl) => {
     return await send(to, "Verify your email address", finalHtml);
 
 }
+
 
 export { sendActivationEmail }

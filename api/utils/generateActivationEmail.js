@@ -8,23 +8,22 @@ const activations = [];
 
 export default async (email) => {
 
+    const sorted = activations.filter(item => item.email == email).sort((a, b) => a.sentDate - b.sentDate);
+
+    if((sorted.length > 1) && (new Date() - sorted[0].sentDate < config.activationEmails.timeBetweenSending)) return "You must wait a while before sending new email";
+
     const token = crypto.randomBytes(32).toString("hex");
     const activationUrl = `${config.appBaseUrl}/activate?token=${token}`;
 
     const sendEmail = await sendActivationEmail(email, activationUrl);
-    if(!sendEmail) return "EMAIL_SENDING_ERROR";
+    if(!sendEmail) return "Failed to send email";
 
     activations.push({
         token, email,
         sentDate: new Date()
     });
 
-    const sorted = activations.filter(item => item.email == email).sort((a, b) => a.sentDate - b.sentDate);
-    if(!sorted.length) return "TRY_AGAIN";
-
-    if(new Date() - sorted[0].sentDate < config.activationEmails.timeBetweenSending) return "WAIT_BEFORE_REQUEST";
-
-    return "SENT";
+    return "SUCCESS";
 
 }
 
