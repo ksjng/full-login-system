@@ -123,7 +123,7 @@ const rules = computed(() => {
             maxLength: maxLength(20),
             isAlphanumeric: helpers.withMessage(
                 () => "Username must be alphanumeric (only letters, numbers and _)", 
-                (value) => /[A-Za-z0-9_]/.test(value)
+                (value) => /^[A-Za-z0-9_]+$/.test(value)
             )
         },
         email: {
@@ -151,7 +151,7 @@ const captchaVerify = (tokenStr) => {
     registerFormData.captcha = tokenStr;
 }
 
-let error = ref("");
+const error = ref("");
 
 const submitRegisterForm = async () => {
 
