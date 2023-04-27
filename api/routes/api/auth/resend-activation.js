@@ -16,19 +16,15 @@ export default async (fastify, options) => {
         const user = await prisma.users.findFirst({
             where: {
                 AND: [
-                    { 
-                        email 
-                    },
-                    { 
-                        status: 0 
-                    }
+                    { email },
+                    { status: 0 }
                 ]
             }
         });
 
         if(!user) return res.send({
             success: false,
-            error: "Could not found any inactive account assiciated with provided email"
+            error: "Could not found any inactive account associated with provided email"
         });
 
         const generateStatus = await generateActivationEmail(email);
