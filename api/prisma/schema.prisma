@@ -18,5 +18,6 @@ model Users {
     ipAddress String @db.VarChar(128)
     createdAt DateTime @default(now())
     lastLoginAt DateTime?
+    avatarUrl String? @db.VarChar(256)
     status Int @default(0)
 }
