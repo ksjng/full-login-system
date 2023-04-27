@@ -17,21 +17,33 @@
                 <div class="mb-4">
                     <label for="login" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Username or email</label>
                     <input 
-                        v-model="loginFormData.login" 
+                        v-model="loginFormData.login"
+                        @change="v$.login.$touch"  
                         type="text" 
                         name="login"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        :class="{
+                            'border-red-500 focus:border-red-500': v$.login.$error,
+                            'border-[#42d392] ': !v$.login.$invalid
+                        }"  
                     >
+                    <span class="text-xs text-red-500" v-if="v$.login.$error">{{ v$.login.$errors[0].$message }}</span>
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <input 
                         v-model="loginFormData.password" 
+                        @change="v$.password.$touch" 
                         type="password" 
                         name="password"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        :class="{
+                            'border-red-500 focus:border-red-500': v$.password.$error,
+                            'border-[#42d392] ': !v$.password.$invalid
+                        }"    
                     >
+                    <span class="text-xs text-red-500" v-if="v$.password.$error">{{ v$.password.$errors[0].$message }}</span>
                 </div>
 
                 <button type="submit" class="float-right my-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign in</button>
@@ -50,15 +62,33 @@
 <script setup>
 
 import { ref, reactive } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
 
 const loginFormData = reactive({
     login: "",
     password: ""
 });
 
+const rules = computed(() => {
+    return {
+        login: {
+            required: helpers.withMessage("The username field is required", required)
+        },
+        password: {
+            required: helpers.withMessage("The password field is required", required)
+        }
+    }
+});
+
+const v$ = useVuelidate(rules, loginFormData);
+
 const error = ref("");
 
 const submitLoginForm = async () => {
+
+    v$.value.$validate();
+    if(v$.value.$error) return;
 
     error.value = "";
 
