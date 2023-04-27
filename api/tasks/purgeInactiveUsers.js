@@ -4,8 +4,8 @@ import config from "../config.js";
 
 setInterval(async () => {
 
-    let gte = new Date() - config.purgeInactiveUsers.maxInactiveAccountAge;
-    gte = new Date(gte).toISOString();
+    let lte = new Date() - config.purgeInactiveUsers.maxInactiveAccountAge;
+    lte = new Date(lte).toISOString();
 
     await prisma.users.deleteMany({
         where: {
@@ -14,7 +14,7 @@ setInterval(async () => {
                     status: 0
                 },
                 {
-                    createdAt: { gte }
+                    createdAt: { lte }
                 }
             ]
         }
