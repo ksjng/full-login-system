@@ -6,6 +6,7 @@ import config from "../config.js";
 
 const activations = [];
 
+
 export default async (email) => {
 
     const sorted = activations.filter(item => item.email == email).sort((a, b) => a.sentDate - b.sentDate);
@@ -34,3 +35,5 @@ setInterval(() => {
     }
 
 }, config.activationEmails.scheduleInterval);
+
+export { activations }
