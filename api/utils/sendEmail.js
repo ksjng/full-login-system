@@ -43,4 +43,14 @@ const sendActivationEmail = async (to, activationUrl) => {
 }
 
 
-export { sendActivationEmail }
+const sendRecoveryEmail = async (to, recoveryUrl) => {
+
+    const htmlContent = await fs.readFile("api/emails/recoverPassword.html", "utf8");
+    const finalHtml = htmlContent.replaceAll("{RECOVERY_URL}", recoveryUrl);
+
+    return await send(to, "Recover password request", finalHtml);
+
+}
+
+
+export { sendActivationEmail, sendRecoveryEmail }
