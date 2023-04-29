@@ -79,7 +79,7 @@
                     <span class="text-xs text-red-500" v-if="v$.repeatPassword.$error">{{ v$.repeatPassword.$errors[0].$message }}</span>
                 </div>
 
-                <vue-hcaptcha :sitekey="config.public.hCaptchaSiteKey" @verify="captchaVerify"></vue-hcaptcha>
+                <vue-hcaptcha ref="captcha" :sitekey="config.public.hCaptchaSiteKey" @verify="captchaVerify"></vue-hcaptcha>
                 <span class="text-xs text-red-500" v-if="v$.captcha.$error">{{ v$.captcha.$errors[0].$message }}</span>
 
                 <small class="block text-small my-3 text-gray-500">By registering you agree to our Terms of Service and Privacy Policy.</small>
@@ -151,6 +151,8 @@ const captchaVerify = (tokenStr) => {
     registerFormData.captcha = tokenStr;
 }
 
+const captcha = ref(null);
+
 const error = ref("");
 
 const submitRegisterForm = async () => {
@@ -181,6 +183,8 @@ const submitRegisterForm = async () => {
         console.error(err);
         error.value = err.message;
     }
+
+    captcha.value.reset();
 
 }
 

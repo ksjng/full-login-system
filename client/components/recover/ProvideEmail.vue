@@ -36,7 +36,7 @@
                 <span class="text-xs text-red-500" v-if="v$.email.$error">{{ v$.email.$errors[0].$message }}</span>
             </div>
 
-            <vue-hcaptcha :sitekey="config.public.hCaptchaSiteKey" @verify="captchaVerify"></vue-hcaptcha>
+            <vue-hcaptcha ref="captcha" :sitekey="config.public.hCaptchaSiteKey" @verify="captchaVerify"></vue-hcaptcha>
             <span class="text-xs text-red-500" v-if="v$.captcha.$error">{{ v$.captcha.$errors[0].$message }}</span>
 
             <button type="submit" class="float-right my-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send recovery email</button>
@@ -79,6 +79,8 @@ const captchaVerify = (tokenStr) => {
     recoverFormData.captcha = tokenStr;
 }
 
+const captcha = ref(null);
+
 const error = ref("");
 const success = ref(0);
 
@@ -110,6 +112,8 @@ const submitRecoverForm = async () => {
         console.error(err);
         error.value = err.message;
     }
+
+    captcha.value.reset();
 
 }
 
