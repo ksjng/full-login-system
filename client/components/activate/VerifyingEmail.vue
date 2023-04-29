@@ -28,7 +28,7 @@ onMounted(async () => {
 
     try {
 
-        const res = await fetch(`/api/auth/activate-email?token=${route.query.token}`);
+        const res = await fetch(`/api/user/auth/activate-email?token=${route.query.token}`);
         if(!res.ok) throw new Error("Failed to connect with API server");
 
         const body = await res.json();

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
-import { prisma } from "../../../index.js";
-import getIpAddr from "../../../utils/getIpAddr.js";
+import { prisma } from "../../../../index.js";
+import getIpAddr from "../../../../utils/getIpAddr.js";
 
 
 export default async (fastify, options) => {

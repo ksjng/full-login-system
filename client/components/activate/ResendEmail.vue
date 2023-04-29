@@ -70,7 +70,7 @@ const resendActivationEmail = async () => {
 
     try {
 
-        const res = await fetch("/api/auth/resend-activation", {
+        const res = await fetch("/api/user/auth/resend-activation", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

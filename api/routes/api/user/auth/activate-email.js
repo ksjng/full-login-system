@@ -1,5 +1,5 @@
-import { prisma } from "../../../index.js";
-import { activations } from "../../../utils/generateActivationEmail.js";
+import { prisma } from "../../../../index.js";
+import { activations } from "../../../../utils/generateActivationEmail.js";
 
 
 export default async (fastify, options) => {

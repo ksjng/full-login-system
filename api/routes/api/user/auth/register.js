@@ -1,11 +1,11 @@
 import { verify } from "hcaptcha";
 import bcrypt from "bcrypt";
 
-import { prisma } from "../../../index.js";
-import getIpAddr from "../../../utils/getIpAddr.js";
-import generateActivationEmail from "../../../utils/generateActivationEmail.js";
+import { prisma } from "../../../../index.js";
+import getIpAddr from "../../../../utils/getIpAddr.js";
+import generateActivationEmail from "../../../../utils/generateActivationEmail.js";
 
-import config from "../../../config.js";
+import config from "../../../../config.js";
 
 
 export default async (fastify, options) => {
