@@ -43,7 +43,7 @@ export default async (fastify, options) => {
 
         const ipAddress = getIpAddr(req);
 
-        await prisma.users.update({
+        const updatedUser = await prisma.users.update({
             where,
             data: { 
                 lastLoginAt: new Date(),
@@ -51,7 +51,9 @@ export default async (fastify, options) => {
             }
         });
 
-        const token = await fastify.generateAuthToken({ user: login });
+        const { username } = updatedUser;
+
+        const token = await fastify.generateAuthToken({ username });
 
         res.setCookie("authorization", token, {
             path: "/",
