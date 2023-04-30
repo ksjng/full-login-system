@@ -31,7 +31,7 @@ export default async (fastify, options) => {
 
         if(config.excludes.blockedUsernames.includes(username.toLowerCase()) || config.excludes.blockedEmails.includes(email.toLowerCase())) return res.send({
             success: false,
-            error: "This username and/or email is on blocklist"
+            error: "Username and/or email on blocklist"
         });
 
         const password = await bcrypt.hash(req.body.password, 12);
