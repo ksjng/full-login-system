@@ -29,6 +29,11 @@ export default async (fastify, options) => {
             error: "Invalid captcha"
         });
 
+        if(config.excludes.blockedUsernames.includes(username.toLowerCase()) || config.excludes.blockedEmails.includes(email.toLowerCase())) return res.send({
+            success: false,
+            error: "This username and/or email is on blocklist"
+        });
+
         const password = await bcrypt.hash(req.body.password, 12);
         const ipAddress = getIpAddr(req);
 
