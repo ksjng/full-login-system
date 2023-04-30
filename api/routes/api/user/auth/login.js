@@ -21,7 +21,14 @@ export default async (fastify, options) => {
 
         if(!user) return res.send({
             success: false,
-            error: "This account does not exist"
+            error: "Incorrect login or password" // Prevents checking if account with provided username/email exists
+        });
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if(!match) return res.send({
+            success: false,
+            error: "Incorrect login or password"
         });
 
         if(!user.status) return res.send({
@@ -36,12 +43,19 @@ export default async (fastify, options) => {
 
         const ipAddress = getIpAddr(req);
 
-        const updateUser = await prisma.users.update({
+        await prisma.users.update({
             where,
             data: { 
                 lastLoginAt: new Date(),
                 ipAddress 
             }
+        });
+
+        const token = await fastify.generateAuthToken({ user: login });
+
+        res.setCookie("authorization", token, {
+            path: "/",
+            signed: true
         });
 
         res.send({ success: true });
