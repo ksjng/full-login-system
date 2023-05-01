@@ -6,10 +6,12 @@
 </template>
 
 <script setup>
+
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
 import Navbar from "./components/Navbar.vue";
 
-onMounted(() => initFlowbite())
+onMounted(() => initFlowbite());
+
 </script>

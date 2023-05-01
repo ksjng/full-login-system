@@ -108,7 +108,7 @@ const submitLoginForm = async () => {
 
         if(!body.success) throw new Error(body.error);
 
-        return await navigateTo("/dashboard");
+        return window.location = "/dashboard";
 
     } catch(err) {
         console.error(err);
