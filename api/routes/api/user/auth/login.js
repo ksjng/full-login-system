@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 
 import { prisma } from "../../../../index.js";
 import getIpAddr from "../../../../utils/getIpAddr.js";
+import getGravatar from "../../../../utils/getGravatar.js";
 
 
 export default async (fastify, options) => {
@@ -24,6 +25,8 @@ export default async (fastify, options) => {
             error: "Incorrect login or password" // Prevents checking if account with provided username/email exists
         });
 
+        const { username, email, status } = user;
+
         const match = await bcrypt.compare(password, user.password);
 
         if(!match) return res.send({
@@ -31,27 +34,26 @@ export default async (fastify, options) => {
             error: "Incorrect login or password"
         });
 
-        if(!user.status) return res.send({
+        if(!status) return res.send({
             success: false,
             error: "Verify your email to log in"
         });
 
-        else if(user.status == 2) res.send({
+        else if(status == 2) res.send({
             success: false,
             error: "Your account is suspended"
         })
 
         const ipAddress = getIpAddr(req);
 
-        const updatedUser = await prisma.users.update({
+        await prisma.users.update({
             where,
             data: { 
                 lastLoginAt: new Date(),
+                avatarUrl: getGravatar(email),
                 ipAddress 
             }
         });
-
-        const { username } = updatedUser;
 
         const token = await fastify.generateAuthToken({ username });
 
