@@ -117,6 +117,7 @@ const submitChangePasswordForm = async () => {
     if(v$.value.$error) return;
 
     error.value = "";
+    success.value = false;
 
     const { oldPassword, newPassword } = changePasswordFormData;
 
