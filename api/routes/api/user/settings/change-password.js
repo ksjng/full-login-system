@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 
 import { prisma } from "../../../../index.js";
+import { sendPasswordChangedEmail } from "../../../../utils/sendEmail.js";
 
 
 export default async (fastify, options) => {
@@ -35,6 +36,8 @@ export default async (fastify, options) => {
             where: { username },
             data: { password: newHashedPassword }
         });
+
+        await sendPasswordChangedEmail(user.email);
 
         res.send({ success: true });
 

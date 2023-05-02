@@ -53,4 +53,13 @@ const sendRecoveryEmail = async (to, recoveryUrl) => {
 }
 
 
-export { sendActivationEmail, sendRecoveryEmail }
+const sendPasswordChangedEmail = async (to) => {
+
+    const finalHtml = await fs.readFile("api/emails/passwordChanged.html", "utf8");
+
+    return await send(to, "Your password has been changed", finalHtml);
+
+}
+
+
+export { sendActivationEmail, sendRecoveryEmail, sendPasswordChangedEmail }
