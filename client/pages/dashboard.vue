@@ -10,7 +10,7 @@
 
             <ChangePassword />
 
-            <div class="flex-1">test</div>
+            <ChangeEmail />
 
         </section>
 
@@ -24,6 +24,7 @@
 import { ref, onMounted } from "vue";
 
 import ChangePassword from "../components/dashboard/ChangePassword.vue";
+import ChangeEmail from "../components/dashboard/ChangeEmail.vue";
 
 const user = ref({});
 
