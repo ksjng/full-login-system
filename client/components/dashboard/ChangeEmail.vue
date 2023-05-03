@@ -21,7 +21,7 @@
             <div class="mb-4">
                     <label for="email" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">New email</label>
                     <input 
-                        v-model="changeEmailFormData.email" 
+                        v-model="changeEmailFormData.newEmail" 
                         @change="v$.newEmail.$touch" 
                         type="email" 
                         name="email"
@@ -73,11 +73,11 @@ const changeEmailFormData = reactive({
 const rules = computed(() => {
     return {
         newEmail: {
-            required: helpers.withMessage("The old password field is required", required),
+            required: helpers.withMessage("The new email field is required", required),
             email: helpers.withMessage("Invalid email format", email)
         },
         password: {
-            required: helpers.withMessage("The new password field is required", required),
+            required: helpers.withMessage("The password field is required", required),
             minLength: minLength(8),
             maxLength: maxLength(72)
         }
@@ -97,11 +97,11 @@ const submitChangeEmailForm = async () => {
     error.value = "";
     success.value = false;
 
-    const { newEmail, password } = changePasswordFormData;
+    const { newEmail, password } = changeEmailFormData;
 
     try {
 
-        const res = await fetch("/api/user/settings/change-email/provide-new", {
+        const res = await fetch("/api/user/settings/change-email", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
