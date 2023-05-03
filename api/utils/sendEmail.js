@@ -33,9 +33,19 @@ const send = async (to, subject, html) => {
 }
 
 
-const sendActivationEmail = async (to, activationUrl) => {
+const sendActivationEmail = async (to, activationUrl, type) => {
 
-    const htmlContent = await fs.readFile("api/emails/activateAccount.html", "utf8");
+    let htmlContent;
+    
+    switch(type) {
+        case 0:
+            htmlContent = await fs.readFile("api/emails/activateAccount.html", "utf8");
+            break;
+        case 1:
+            htmlContent = await fs.readFile("api/emails/verifyNewEmail.html", "utf8");
+            break;
+    }
+
     const finalHtml = htmlContent.replaceAll("{ACTIVATION_URL}", activationUrl);
 
     return await send(to, "Verify your email address", finalHtml);
@@ -61,5 +71,16 @@ const sendPasswordChangedEmail = async (to) => {
 
 }
 
+const sendEmailChangedEmail = async (to, newEmail) => {
 
-export { sendActivationEmail, sendRecoveryEmail, sendPasswordChangedEmail }
+    const htmlContent = await fs.readFile("api/emails/emailChanged.html", "utf8");
+    const finalHtml = htmlContent
+        .replaceAll("{OLD_EMAIL}", to)
+        .replaceAll("{NEW_EMAIL}", newEmail);
+
+    return await send(to, "Your email has been changed", finalHtml);
+
+}
+
+
+export { sendActivationEmail, sendRecoveryEmail, sendPasswordChangedEmail, sendEmailChangedEmail }
