@@ -1,5 +1,6 @@
 import { prisma } from "../../../../index.js";
 import { activations } from "../../../../utils/generateActivationEmail.js";
+import { sendEmailChangedEmail } from "../../../../utils/sendEmail.js";
 
 
 export default async (fastify, options) => {
@@ -20,13 +21,24 @@ export default async (fastify, options) => {
             error: "This link is invalid or expired"
         });
 
-        const { email } = entry;
+        const { email, type, details } = entry;
 
-        const user = await prisma.users.findFirst({
+        let user;
+
+        if(!type) user = await prisma.users.findFirst({
             where: {
                 AND: [
                     { email },
                     { status: 0 }
+                ]
+            }
+        });
+
+        else if(type == 1) user = await prisma.users.findFirst({
+            where: {
+                AND: [
+                    { email: details.oldEmail },
+                    { status: 1 }
                 ]
             }
         });
@@ -36,15 +48,24 @@ export default async (fastify, options) => {
             error: "This account is already activated or does not exist"
         });
 
-        const updateUser = await prisma.users.update({
+        let updateUser;
+
+        if(!type) updateUser = await prisma.users.update({
             where: { email },
             data: { status: 1 }
+        });
+
+        else if(type == 1) updateUser = await prisma.users.update({
+            where: { email: details.oldEmail },
+            data: { email }
         });
 
         if(!updateUser.status) return res.send({
             success: false,
             error: "Could not update account data"
         });
+
+        if(type == 1) await sendEmailChangedEmail(details.oldEmail, email);
 
         res.send({ success: true });
 
