@@ -6,11 +6,17 @@
             <p class="mt-5 text-center text-xl text-gray-800">Hello, <span class="text-4xl font-medium underline decoration-6 decoration-blue-600">{{ user.username }}</span></p>
         </section>
 
-        <section class="text-center mt-8 flex">
+        <section class="text-center mt-8 md:flex">
 
             <ChangePassword />
 
             <ChangeEmail />
+
+        </section>
+
+        <section class="text-center mt-8 md:flex">
+
+            <SetupTOTP />
 
         </section>
 
@@ -25,6 +31,7 @@ import { ref, onMounted } from "vue";
 
 import ChangePassword from "../components/dashboard/ChangePassword.vue";
 import ChangeEmail from "../components/dashboard/ChangeEmail.vue";
+import SetupTOTP from "../components/dashboard/SetupTOTP.vue";
 
 const user = ref({});
 
