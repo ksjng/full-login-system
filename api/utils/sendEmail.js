@@ -37,14 +37,8 @@ const sendActivationEmail = async (to, activationUrl, type) => {
 
     let htmlContent;
     
-    switch(type) {
-        case 0:
-            htmlContent = await fs.readFile("api/emails/activateAccount.html", "utf8");
-            break;
-        case 1:
-            htmlContent = await fs.readFile("api/emails/verifyNewEmail.html", "utf8");
-            break;
-    }
+    if(!type) htmlContent = await fs.readFile("api/emails/activateAccount.html", "utf8");
+    else if(type == 1) htmlContent = await fs.readFile("api/emails/verifyNewEmail.html", "utf8");
 
     const finalHtml = htmlContent.replaceAll("{ACTIVATION_URL}", activationUrl);
 
