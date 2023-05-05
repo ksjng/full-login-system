@@ -21,6 +21,16 @@ fastify.register(cookie, { secret: config.auth.secret });
 fastify.register(esso({ secret: config.auth.secret }));
 fastify.register(autoload, { dir: "./api/routes" });
 
+fastify.setErrorHandler((err, req, res) => {
+
+    const error = err.message;
+    if(error == "Unauthorized") return res.status(401).send({ success: false, error });
+    
+    console.error(err.stack);
+    res.send({ success: false, error }); 
+
+});
+
 const prisma = new PrismaClient();
 
 (async () => {
