@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import autoload from "@fastify/autoload";
 import cookie from "@fastify/cookie";
 import esso from "fastify-esso";
+import totp from "@sergiomorenoalbert/fastify-totp";
 import { PrismaClient } from "@prisma/client";
 
 import config from "./config.js";
@@ -19,6 +20,7 @@ const fastify = Fastify({
 fastify.register(cors);
 fastify.register(cookie, { secret: config.auth.secret });
 fastify.register(esso({ secret: config.auth.secret }));
+fastify.register(totp);
 fastify.register(autoload, { dir: "./api/routes" });
 
 fastify.setErrorHandler((err, req, res) => {

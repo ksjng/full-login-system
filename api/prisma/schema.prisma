@@ -15,6 +15,8 @@ model Users {
     username String @db.VarChar(20) @unique
     email String @db.VarChar(128) @unique
     password String @db.VarChar(60)
+    totpSecret String? @db.VarChar(20)
+    totpBackupCodes String? @db.VarChar(100)
     ipAddress String @db.VarChar(128)
     createdAt DateTime @default(now())
     lastLoginAt DateTime?
