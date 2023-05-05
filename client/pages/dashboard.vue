@@ -39,7 +39,7 @@ onMounted(async () => {
 
     try {
         const res = await fetch("/api/user/me");
-
+        
         if(res.status == 401) return await navigateTo("/login");
 
         if(!res.ok) throw new Error("Failed to connect with API server");
