@@ -27,7 +27,6 @@
         "@vuelidate/core": "^2.0.2",
         "@vuelidate/validators": "^2.0.2",
         "bcrypt": "^5.1.0",
-        "crypto": "^1.0.1",
         "fastify": "^4.15.0",
         "fastify-esso": "^1.3.4",
         "flowbite": "^1.6.5",
