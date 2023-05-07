@@ -9,7 +9,7 @@ export default async (fastify, options) => {
 
     fastify.post("/login", async (req, res) => {
 
-        const { login, password } = req.body;
+        const { login, password, code } = req.body;
 
         if(!login || !password) return res.send({
             success: false,
@@ -25,7 +25,7 @@ export default async (fastify, options) => {
             error: "Incorrect login or password" // Prevents checking if account with provided username/email exists
         });
 
-        const { username, email, status } = user;
+        const { username, email, status, totpSecret, totpBackupCodes } = user;
 
         const match = await bcrypt.compare(password, user.password);
 
@@ -33,6 +33,50 @@ export default async (fastify, options) => {
             success: false,
             error: "Incorrect login or password"
         });
+
+        if(totpSecret) {
+
+            if(!code) return res.send({
+                success: false,
+                error: "Missing TOTP code"
+            });
+
+            if(code.length == 8) { // Using backup code
+
+                let backupCodes = JSON.parse(totpBackupCodes);
+
+                if(!backupCodes.includes(code)) return res.send({ 
+                    success: false,
+                    error: "Wrong TOTP backup code"
+                });
+
+                backupCodes = backupCodes.filter(c => c !== code);
+
+                await prisma.users.update({
+                    where,
+                    data: { 
+                        totpBackupCodes: JSON.stringify(backupCodes) 
+                    }
+                });
+
+            } else if(code.length == 6) { // Using regular code
+
+                const isVerified = fastify.totp.verify({ 
+                    secret: totpSecret, 
+                    token: code 
+                });
+        
+                if(!isVerified) return res.send({ 
+                    success: false,
+                    error: "Wrong TOTP code"
+                });
+
+            } else return res.send({ 
+                success: false,
+                error: "Wrong TOTP code"
+            });
+
+        }
 
         if(!status) return res.send({
             success: false,
@@ -42,7 +86,7 @@ export default async (fastify, options) => {
         else if(status == 2) res.send({
             success: false,
             error: "Your account is suspended"
-        })
+        });
 
         const ipAddress = getIpAddr(req);
 

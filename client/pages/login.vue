@@ -46,6 +46,17 @@
                     <span class="text-xs text-red-500" v-if="v$.password.$error">{{ v$.password.$errors[0].$message }}</span>
                 </div>
 
+                <div v-if="missingMfa" class="mb-4">
+                    <label for="code" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">TOTP code</label>
+                    <input 
+                        v-model="loginFormData.code" 
+                        @change="v$.password.$touch" 
+                        type="text" 
+                        name="code"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   
+                    >
+                </div>
+
                 <button type="submit" class="float-right my-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign in</button>
             
                 <p class="text-small mt-16 text-gray-700">Don't have an account? <nuxt-link to="/register" class="text-blue-800 hover:text-blue-500">Sign up</nuxt-link>.</p>
@@ -68,7 +79,8 @@ import { required, helpers } from "@vuelidate/validators";
 
 const loginFormData = reactive({
     login: "",
-    password: ""
+    password: "",
+    code: ""
 });
 
 const rules = computed(() => {
@@ -85,6 +97,8 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, loginFormData);
 
 const error = ref("");
+
+const missingMfa = ref(0);
 
 const submitLoginForm = async () => {
 
@@ -106,7 +120,13 @@ const submitLoginForm = async () => {
         if(!res.ok) throw new Error("Failed to connect with API server");
         const body = await res.json();
 
-        if(!body.success) throw new Error(body.error);
+        if(!body.success) {
+
+            if(body.error == "Missing TOTP code" && !missingMfa.value) return missingMfa.value = true;
+
+            throw new Error(body.error);
+
+        }
 
         return window.location = "/dashboard";
 
