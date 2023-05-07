@@ -7,7 +7,7 @@ export default async (fastify, options) => {
 
     fastify.get("/me", async (req, res) => {
 
-        const { username, email, createdAt, lastLoginAt, avatarUrl } = await prisma.users.findFirst({
+        const { username, email, createdAt, lastLoginAt, avatarUrl, totpSecret, totpBackupCodes } = await prisma.users.findFirst({
             where: {
                 AND: [
                     { username: req.auth.username },
@@ -18,7 +18,11 @@ export default async (fastify, options) => {
 
         res.send({
             success: true,
-            data: { username, email, createdAt, lastLoginAt, avatarUrl }
+            data: { 
+                username, email, createdAt, lastLoginAt, avatarUrl,
+                backupCodes: JSON.parse(totpBackupCodes),
+                mfaEnabled: totpSecret ? true : false
+            }
         });
 
     });
