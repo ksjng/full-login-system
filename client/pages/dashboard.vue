@@ -16,7 +16,7 @@
 
         <section class="text-center mt-8 md:flex">
 
-            <SetupTOTP />
+            <SetupTotp />
 
         </section>
 
@@ -31,7 +31,7 @@ import { ref, onMounted } from "vue";
 
 import ChangePassword from "../components/dashboard/ChangePassword.vue";
 import ChangeEmail from "../components/dashboard/ChangeEmail.vue";
-import SetupTOTP from "../components/dashboard/SetupTOTP.vue";
+import SetupTotp from "../components/dashboard/SetupTotp.vue";
 
 const user = ref({});
 
