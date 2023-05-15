@@ -29,7 +29,7 @@ fastify.setErrorHandler((err, req, res) => {
     if(error == "Unauthorized") return res.status(401).send({ success: false, error });
     
     console.error(err.stack);
-    res.send({ success: false, error }); 
+    res.status(500).send({ success: false, error }); 
 
 });
 
